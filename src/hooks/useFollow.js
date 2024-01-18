@@ -32,11 +32,12 @@ const useFollow = (uid) => {
           ...authUser,
           following: authUser.following.filter(id => id !== uid)
         })
-        setUserProfile({
-          ...userProfile,
-          followers: userProfile.followers.filter(id => id !== authUser.uid)
-        })
-
+        if (userProfile) {
+          setUserProfile({
+            ...userProfile,
+            followers: userProfile.followers.filter(id => id !== authUser.uid)
+          })
+        }
         localStorage.setItem("user-info", JSON.stringify({
           ...authUser,
           following: authUser.following.filter(id => id !== uid)
@@ -48,10 +49,12 @@ const useFollow = (uid) => {
           ...authUser,
           following: [...authUser.following, uid]
         })
-        setUserProfile({
-          ...userProfile,
-          followers: [...userProfile.followers, authUser.uid]
-        })
+        if (userProfile) {
+          setUserProfile({
+            ...userProfile,
+            followers: [...userProfile.followers, authUser.uid]
+          })
+        }
         localStorage.setItem("user-info", JSON.stringify({
           ...authUser,
           following: [...authUser.following, uid]
