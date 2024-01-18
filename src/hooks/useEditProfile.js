@@ -15,6 +15,9 @@ const useEditProfile = () => {
   const showToast = useShowToast();
 
   const editProfile = async (input, selectedFile) => {
+    if (isLoading) {
+      return;
+    }
     if (isLoading || !authUser) {
       return
     }
