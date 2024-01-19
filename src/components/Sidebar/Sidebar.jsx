@@ -2,7 +2,7 @@ import { Button, Box, Flex, Link, Tooltip } from "@chakra-ui/react"
 import { Link as RouterLink } from "react-router-dom"
 import { InstagramLogo, InstagramMobileLogo } from "../../assets/Constants"
 import { BiLogOut } from "react-icons/bi"
-import useLogOut from "../../hooks/useLogout"
+import useLogOut from "../../hooks/useLogOut"
 import SidebarItems from "./SidebarItems"
 
 const Sidebar = () => {
