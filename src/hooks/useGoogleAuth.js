@@ -19,7 +19,7 @@ const useGoogleAuth = () => {
 
       const userRef = doc(firestore, "users", newUser.user.uid);
       const userSnap = await getDoc(userRef);
-      const userDocument = userSnap.data();
+      let userDocument = userSnap.data();
 
       if (!userSnap.exists()) {
         userDocument = {
