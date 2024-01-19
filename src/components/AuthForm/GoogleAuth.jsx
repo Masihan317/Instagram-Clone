@@ -6,7 +6,7 @@ const GoogleAuth = ({ prefix }) => {
 
   return (
     <Flex alignItems={"center"} justifyContent={"center"} cursor="pointer" isLoading={loading} onClick={handleGoogleAuth}>
-      <Image src="/public/google.png" w={5} alt="Google Logo" />
+      <Image src="/google.png" w={5} alt="Google Logo" />
       <Text mx={2} color="blue.500">{prefix} with Google</Text>
     </Flex>
   )
