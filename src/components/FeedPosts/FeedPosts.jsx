@@ -1,19 +1,14 @@
-import { Box, Container, Flex, Skeleton, SkeletonCircle, VStack } from "@chakra-ui/react"
+import { Box, Container, Flex, Skeleton, SkeletonCircle, Text, VStack } from "@chakra-ui/react"
 import FeedPost from "./FeedPost"
-import { useState, useEffect } from "react"
+import useFetchFeedPosts from "../../hooks/useFetchFeedPosts"
+import { LuHeartHandshake } from "react-icons/lu";
 
 const FeedPosts = () => {
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
-  }, [])
+  const { isLoading, posts } = useFetchFeedPosts()
 
   return (
     <Container maxW={"container.sm"} py={10} px={2}>
-      {isLoading && [0, 1, 2, 3].map((_, index) => (
+      {isLoading && [0, 1, 2].map((_, index) => (
         <VStack key={index} gap={4} alignItems={"flex-start"} mb={10}>
           <Flex gap={2}>
             <SkeletonCircle size={10} />
@@ -23,17 +18,17 @@ const FeedPosts = () => {
             </VStack>
           </Flex>
           <Skeleton w={"full"}>
-            <Box h={"500px"}>contents wrapped</Box>
+            <Box h={"400px"}>contents wrapped</Box>
           </Skeleton>
         </VStack>
       ))}
 
-      {!isLoading && (
+      {!isLoading && posts.length > 0 && posts.map((post) => <FeedPost key={post.id} post={post} />)}
+      {!isLoading && posts.length === 0 && (
         <>
-          <FeedPost img="/img1.png" username="burakorkmezz" avatar="/img1.png"/>
-          <FeedPost img="/img2.png" username="josh" avatar="/img2.png"/>
-          <FeedPost img="/img3.png" username="janedoe" avatar="/img3.png"/>
-          <FeedPost img="/img4.png" username="johndoe" avatar="/img4.png"/>
+          <Text fontSize={"xl"} color={"whiteAlpha.800"}>It looks like you are not following anyone.</Text>
+          <Text fontSize={"xl"} color={"whiteAlpha.800"}>Go follow someone on the suggested for you list! :D</Text>
+          <LuHeartHandshake size={"xl"}/>
         </>
       )}
     </Container>

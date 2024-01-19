@@ -1,16 +1,19 @@
-import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text } from "@chakra-ui/react"
+import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text, useDisclosure } from "@chakra-ui/react"
 import { useState, useRef } from 'react'
 import { CommentLogo, NotificationsLogo, UnlikeLogo } from "../../assets/Constants"
 import usePostComment from "../../hooks/usePostComment"
 import useLikePost from "../../hooks/useLikePost"
 import useAuthStore from "../../store/authStore"
+import { timeAgo } from '../../utilities/timeAgo'
+import CommentModal from "../Modal/CommentModal"
 
-const PostFooter = ({ post, username, isProfilePage }) => {
+const PostFooter = ({ post, isProfilePage, profile }) => {
   const [comment, setComment] = useState("");
   const { isCommenting, handlePostComment } = usePostComment();
   const { isLiked, likes, handleLikePost } = useLikePost(post);
   const authUser = useAuthStore(state => state.user);
   const commentRef = useRef(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSubmitComment = async () => {
     try {
@@ -31,22 +34,28 @@ const PostFooter = ({ post, username, isProfilePage }) => {
           <CommentLogo />
         </Box>
       </Flex>
-
       <Text fontWeight={600} fontSize={"sm"}>
         {likes} likes
       </Text>
-
+      {isProfilePage && (
+        <Text fontSize={12} color={"gray"} >
+          Posted {timeAgo(post.createdAt)}
+        </Text>
+      )}
       {!isProfilePage && (
         <>
           <Text fontWeight={700} fontSize={"sm"}>
-            {username}{" "}
+            {profile?.username}{" "}
           </Text>
           <Text as={"span"} fontWeight={400}>
-            Feeling good
+            {post.caption}
           </Text>
-          <Text color={"gray"} fontSize={"sm"}>
-            View all 1,000 comments
-          </Text>
+          {post.comments.length > 0 && (
+            <Text color={"gray"} fontSize={"sm"} cursor={"pointer"} onClick={onOpen}>
+              View all {post.comments.length} comment{post.comments.length > 1 && "s"}
+            </Text>
+          )}
+          {isOpen ? <CommentModal isOpen={isOpen} onClose={onClose} post={post} /> : null}
         </>
       )}
       {authUser && (
