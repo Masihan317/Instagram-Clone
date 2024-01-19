@@ -3,6 +3,7 @@ import { AiFillHeart } from "react-icons/ai"
 import { FaComment } from "react-icons/fa"
 import { MdDelete } from "react-icons/md"
 import Comment from "../Comment/Comment"
+import Caption from "../Comment/Caption"
 import PostFooter from "../FeedPosts/PostFooter"
 import useUserProfileStore from "../../store/userProfileStore"
 import useAuthStore from "../../store/authStore"
@@ -20,7 +21,7 @@ const ProfilePost = ({ post }) => {
   const showToast = useShowToast();
   const [isDeleting, setIsDeleting] = useState(false);
   const deletePost = usePostStore(state => state.deletePost)
-  const deletePostCount = useUserProfileStore(state => state.deletePost)
+  const decrementPostCount = useUserProfileStore(state => state.decrementPostCount)
 
   const handleDeletePost = async () => {
     try {
@@ -38,7 +39,7 @@ const ProfilePost = ({ post }) => {
         posts: arrayRemove(post.id)
       })
       deletePost(post.id);
-      deletePostCount(post.id);
+      decrementPostCount(post.id);
       showToast("Success", "Post deleted successfully.", "success")
       setIsDeleting(false);
     } catch (error) {
@@ -117,21 +118,11 @@ const ProfilePost = ({ post }) => {
                 </Flex>
                 <Divider my={4} bg={"gray.500"} />
                 <VStack w={"full"} alignItems={"start"} maxH={"350px"} overflowY={"auto"}>
-                  <Comment
-                    createdAt="1d ago"
-                    username="asaprogrammer_"
-                    profilePic="/profilepic.png"
-                    text="wow dummy"
-                  />
-                  <Comment
-                    createdAt="12h ago"
-                    username="abrahmov"
-                    profilePic="https://bit.ly/dan-abramov"
-                    text="nice pic"
-                  />
+                  {post.caption && <Caption post={post} />}
+                  {post.comments.map((comment) => (<Comment key={comment.id} comment={comment} />))}
                 </VStack>
                 <Divider my={4} bg={"gray.800"} />
-                <PostFooter isProfilePage={true}/>
+                <PostFooter isProfilePage={true} post={post} />
               </Flex>
             </Flex>
           </ModalBody>

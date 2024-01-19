@@ -21,6 +21,7 @@ const useFetchPosts = () => {
       try {
         const q = query(collection(firestore, "posts"), where("createdBy", "==", userProfile.uid));
         const querySnapshot = await getDocs(q);
+        const posts = [];
         querySnapshot.forEach((doc) => {
           posts.push({...doc.data(), id: doc.id});
         })
